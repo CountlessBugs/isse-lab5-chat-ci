@@ -21,9 +21,12 @@ jobs:
       - name: Configure Git to use SSH
         run: |
           $configPath = Join-Path $env:RUNNER_TEMP "lab5-gitconfig"
+          $keyPath = Join-Path $env:USERPROFILE ".ssh\id_ed25519_github"
+          $knownHostsPath = Join-Path $env:USERPROFILE ".ssh\known_hosts"
           git config --file $configPath "url.git@github.com:.insteadOf" "https://github.com/"
           "GIT_CONFIG_GLOBAL=$configPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "GIT_SSH_COMMAND=ssh -o BatchMode=yes" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $sshCommand = "ssh -o BatchMode=yes -o IdentitiesOnly=yes -i `"$keyPath`" -o UserKnownHostsFile=`"$knownHostsPath`""
+          "GIT_SSH_COMMAND=$sshCommand" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Check out repository
         uses: actions/checkout@v7
