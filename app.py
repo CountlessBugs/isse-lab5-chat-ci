@@ -133,6 +133,7 @@ def delete_message(message_id: int):
     if record is None:
         return jsonify({"error": f"id={message_id} 的聊天记录不存在"}), 404
 
+    messages.remove(record)
     return jsonify({"id": message_id, "deleted": True}), 200
 
 
