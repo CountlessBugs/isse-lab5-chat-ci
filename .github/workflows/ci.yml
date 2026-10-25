@@ -13,10 +13,12 @@ jobs:
   test:
     name: Tests and coverage
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: powershell
 
     steps:
       - name: Configure Git to use SSH
-        shell: pwsh
         run: |
           $configPath = Join-Path $env:RUNNER_TEMP "lab5-gitconfig"
           git config --file $configPath "url.git@github.com:.insteadOf" "https://github.com/"
